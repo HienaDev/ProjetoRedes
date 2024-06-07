@@ -33,6 +33,7 @@ De resto vêm o mesmo.
 
 ![Side by side](./Images/side_by_side_player_server.png)
 
+O jogo começa após 30 segundos depois de ter pelo menos 2 jogadores conectados, e permite um máximo de 4 jogadores.
 Os jogadores escolhem o seu movimento com:
 - W: Andar para cima;
 - S: Andar para baixo;
@@ -48,4 +49,30 @@ Esses movimentos são dispostos por baixo do icon do jogador, com um icon da dec
 
 Durante o jogo cada jogador tem 2 segundos para escolher a sua próxima ação e depois essa ação é executada.
 
-### 
+### Implementação em Unity
+
+Todo o jogo é controlado pelo servidor, e os jogadores comunicam com o servidor a sua ação.
+No ínicio todos os jogos são iguais com esta configuração:
+- NetworkManager: tem os componentes Network Manager, Unity Transport e Network Setup;
+- SpawnPoints: tem 4 objetos vazios para dar como ponto inicial para cada jogador;
+- StartMenu: tem os dois botões e o campo para o código;
+- StartGame: caso seja o servidor, tem o botão de começar mais cedo;
+- GameInterface: tem a grelha de jogo e o UI com o código;
+- Loading: um ecrã que apenas diz "Loading..." enquanto o jogador se conecta ou o servidor inicia.
+
+![Inspector](./Images/unity_inspector.png)
+
+Dentro do NetworkManager temos o Network Setup que é onde tudo acontece:
+
+Temos dois métodos iniciais, o StartServer e o StartPlayer, este métodos são chamados com os botões Start Server e Start Player, respetivamente.
+Em ambos os métodos inicializamos uma lista de *Player* para guardar as sprites que são dispostas durante o jogo.
+Depois verificamos se o prótocolo do UnityTransport é um relay server, e se for, tornamos a variável isRelay verdadeira.
+No final desligamos a interface do menu que inclui os botões e ativamos a interface com a mensagem de "Loading...":
+
+![Metodos](./Images/metodos_iniciais.png)
+
+Depois temos o método StartAsServerCR, que é chamado no método StartServer, neste método conectamo-nos ao relay caso o booleano isRelay esteja em verdadeiro, e é ai que recebemos o código para os jogadores se conectarem.
+Iniciamos o servidor, e caso o servidor seja iniciado instanciamos o objeto GameManager, que vai controlar todo o jogo e mexer os sprites dos jogadores, instanciar as balas, detetar colisões e controlar o tempo e os turnos.
+Por fim desligamos a interface de Loading, e ativamos a interface com o botão de começar mais cedo, e a interface do jogo:
+
+![Metodo Server](./Images/server_metodo.png)

@@ -78,46 +78,6 @@ public class NetworkSetup : MonoBehaviour
 
 
 
-    //    void Start()
-    //    {
-    //        PlayerSprites = new List<Player>();
-    //        // Parse command line arguments
-    //        string[] args = System.Environment.GetCommandLineArgs();
-    //        for (int i = 0; i < args.Length; i++)
-    //        {
-    //            if (args[i] == "--server")
-    //            {
-    //                // --server found, this should be a server application
-    //                isServer = true;
-    //            }
-    //            else if (args[i] == "--code")
-    //            {
-    //                joinCode = ((i + 1) < args.Length) ? (args[i + 1]) : ("");
-    //            }
-    //        }
-
-    //#if UNITY_EDITOR
-    //        if (forceServer) isServer = true;
-    //#endif
-
-
-    //        transport = GetComponent<UnityTransport>();
-    //        if (transport.Protocol == UnityTransport.ProtocolType.RelayUnityTransport)
-    //        {
-    //            isRelay = true;
-    //            Debug.Log("Relay true");
-    //        }
-    //        else
-    //        {
-    //            textJoinCode.gameObject.SetActive(false);
-    //        }
-
-    //        if (isServer)
-    //            StartCoroutine(StartAsServerCR());
-    //        else
-    //            StartCoroutine(StartAsClientCR());
-    //    }
-
     private void Start()
     {
 
@@ -183,7 +143,7 @@ public class NetworkSetup : MonoBehaviour
     IEnumerator StartAsServerCR()
     {
         Debug.Log("start server");
-        SetWindowTitle("MPVolleyballs - Server");
+        SetWindowTitle("TurnShooter - Server");
         var networkManager = GetComponent<NetworkManager>();
         networkManager.enabled = true;
         transport.enabled = true;
@@ -392,7 +352,7 @@ public class NetworkSetup : MonoBehaviour
 
     IEnumerator StartAsClientCR()
     {
-        SetWindowTitle("MPVolleyballs - Client");
+        SetWindowTitle("TurnShooter - Client");
         var networkManager = GetComponent<NetworkManager>();
         networkManager.enabled = true;
         transport.enabled = true;
@@ -580,7 +540,7 @@ public class NetworkSetup : MonoBehaviour
           .Where(s => s.enabled)
           .Select(s => s.path)
           .ToArray();
-        buildPlayerOptions.locationPathName = Path.Combine("Build", "MPVolleyball.exe");
+        buildPlayerOptions.locationPathName = Path.Combine("Build", "TurnShooter.exe");
         buildPlayerOptions.target = BuildTarget.StandaloneWindows64;
         buildPlayerOptions.options = BuildOptions.None;
         // Perform the build
@@ -612,7 +572,7 @@ public class NetworkSetup : MonoBehaviour
     [MenuItem("Tools/Launch (Server)", priority = 30)]
     public static void Launch1()
     {
-        Run("Build\\MPVolleyball.exe", "--server");
+        Run("Build\\TurnShooter.exe", "--server");
     }
     [MenuItem("Tools/Launch (Server + 2 Clients) _F12", priority = 40)]
     public static void Launch2()
@@ -620,9 +580,9 @@ public class NetworkSetup : MonoBehaviour
         CloseAll();
         if (BuildGame())
         {
-            Run("Build\\MPVolleyball.exe", "--server");
-            Run("Build\\MPVolleyball.exe", "");
-            Run("Build\\MPVolleyball.exe", "");
+            Run("Build\\TurnShooter.exe", "--server");
+            Run("Build\\TurnShooter.exe", "");
+            Run("Build\\TurnShooter.exe", "");
         }
 
     }
@@ -630,25 +590,25 @@ public class NetworkSetup : MonoBehaviour
     [MenuItem("Tools/Launch (Server + 4 Clients) _F8", priority = 40)]
     public static void LaunchALL()
     {
-        Run("Build\\MPVolleyball.exe", "--server");
-        Run("Build\\MPVolleyball.exe", "");
-        Run("Build\\MPVolleyball.exe", "");
-        Run("Build\\MPVolleyball.exe", "");
-        Run("Build\\MPVolleyball.exe", "");
+        Run("Build\\TurnShooter.exe", "--server");
+        Run("Build\\TurnShooter.exe", "");
+        Run("Build\\TurnShooter.exe", "");
+        Run("Build\\TurnShooter.exe", "");
+        Run("Build\\TurnShooter.exe", "");
     }
 
     [MenuItem("Tools/Launch 2 Client _F9", priority = 50)]
     public static void Launch1Client()
     {
-        Run("Build\\MPVolleyball.exe", "");
-        Run("Build\\MPVolleyball.exe", "");
+        Run("Build\\TurnShooter.exe", "");
+        Run("Build\\TurnShooter.exe", "");
     }
 
     [MenuItem("Tools/Close All _F10", priority = 100)]
     public static void CloseAll()
     {
         // Get all processes with the specified name
-        Process[] processes = Process.GetProcessesByName("MPVolleyball");
+        Process[] processes = Process.GetProcessesByName("TurnShooter");
         foreach (var process in processes)
         {
             try
