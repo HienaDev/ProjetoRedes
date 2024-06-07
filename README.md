@@ -168,10 +168,6 @@ Durate o update, verificamos os inputs do jogador local, atualizamos o UI respet
 
 ![PlayerControllerUpdate](./Images/player_controller_update.png)
 
-## Conclusão
-
-
-
 ## Links
 
 [Repositório Git Hub](https://github.com/HienaDev/ProjetoRedes)
