@@ -18,35 +18,6 @@ O sistema de relay do unity é um sistema peer to peer, logo o host para além d
 
 ![Diagrama de redes](./Images/diagrama_de_redes.png)
 
-### Largura de Banda
-
-Quando um cliente se conecta ao servidor, envia-se cerca de 550 bytes e recebe-se 112 + 98 bytes:
-
-![Player Connect](./Images/profiler_player_connect_1.png)
-![Player Connect](./Images/profiler_player_connect_2.png)
-
-O servidor envia 24 bytes por cada sincronização do tempo:
-
-![TimeSync](./Images/time_sync.png)
-
-Quando o jogo começa, é enviado cerca de 45 bytes para cada jogador por frame, os picos que se vêm são os 24 bytes da sincronização de tempo:
-
-![Bytes per Frame](./Images/bytes_por_frame.png)
-
-Sempre que um jogador envia um input ao servidor, o servidor recebe cerca de 31 bytes por cada cliente, e envia cerca de 13 bytes por cliente:
-
-![Bytes per input](./Images/bytes_per_input_1.png)
-![Bytes per input](./Images/bytes_per_input_2.png)
-
-Por cada turno (a cada *timerTurn* seconds), são enviados 90 + 39 bytes para cada cliente por cada bala, neste caso foram criadas duas balas, depois são enviados 18 bytes para cada movimento da bala para cada cliente, durante este turno haviam 6 balas:
-
-![Bytes per turn](./Images/bytes_per_turn_1.png)
-![Bytes per turn](./Images/bytes_per_turn_2.png)
-
-Quando um jogador morre são enviados cerca de 224 bytes para cada jogador:
-
-![Bytes per death](./Images/bytes_per_death.png)
-
 ### Jogo
 
 Ao abrir temos duas opções, iniciar um servidor ou entrar num como jogador:
@@ -168,12 +139,41 @@ Durate o update, verificamos os inputs do jogador local, atualizamos o UI respet
 
 ![PlayerControllerUpdate](./Images/player_controller_update.png)
 
+### Largura de Banda
+
+Quando um cliente se conecta ao servidor, envia-se cerca de 550 bytes e recebe-se 112 + 98 bytes:
+
+![Player Connect](./Images/profiler_player_connect_1.png)
+![Player Connect](./Images/profiler_player_connect_2.png)
+
+O servidor envia 24 bytes por cada sincronização do tempo:
+
+![TimeSync](./Images/time_sync.png)
+
+Quando o jogo começa, é enviado cerca de 45 bytes para cada jogador por frame, os picos que se vêm são os 24 bytes da sincronização de tempo:
+
+![Bytes per Frame](./Images/bytes_por_frame.png)
+
+Sempre que um jogador envia um input ao servidor, o servidor recebe cerca de 31 bytes por cada cliente, e envia cerca de 13 bytes por cliente:
+
+![Bytes per input](./Images/bytes_per_input_1.png)
+![Bytes per input](./Images/bytes_per_input_2.png)
+
+Por cada turno (a cada *timerTurn* seconds), são enviados 90 + 39 bytes para cada cliente por cada bala, neste caso foram criadas duas balas, depois são enviados 18 bytes para cada movimento da bala para cada cliente, durante este turno haviam 6 balas:
+
+![Bytes per turn](./Images/bytes_per_turn_1.png)
+![Bytes per turn](./Images/bytes_per_turn_2.png)
+
+Quando um jogador morre são enviados cerca de 224 bytes para cada jogador:
+
+![Bytes per death](./Images/bytes_per_death.png)
+
 ## Links
 
 [Repositório Git Hub](https://github.com/HienaDev/ProjetoRedes)
 
 Para testar a build, uma pessoa terá que executar o programa duas vezes, uma para ligar o servidor e outro para jogar, depois qualquer pessoa com o executável e com o código pode juntar-se a partida:
-[Build Projeto](https://drive.google.com/file/d/1O4kKrpXxxA3TtClZaGw47pU3MQbqnPh4/view?usp=sharing) 
+[Build Projeto](https://drive.google.com/file/d/1O4kKrpXxxA3TtClZaGw47pU3MQbqnPh4/view?usp=sharing)
 
 ## Agradecimentos
 
