@@ -302,7 +302,6 @@ public class NetworkSetup : MonoBehaviour
 
     private void OnClientConnected(ulong clientId)
     {
-        //Debug.Log($"Player {clientId} connected, prefab index = {playerPrefabIndex}!");
         // Check a free spot for this player
         var spawnPos = Vector3.zero;
         var currentPlayers = FindObjectsOfType<Player>();

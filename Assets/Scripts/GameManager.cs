@@ -43,10 +43,6 @@ public class GameManager : NetworkBehaviour
         
     }
 
-
-
-    [SerializeField] private GameObject greenBall;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -79,11 +75,6 @@ public class GameManager : NetworkBehaviour
 
         }
 
-        
-
-
-        
-
         if (Time.time - justTurned > timerTurn && gameStarted)
         {
             UpdatePlayers();
@@ -91,11 +82,8 @@ public class GameManager : NetworkBehaviour
             timerToStart = timerTurn;
         }
 
-        Debug.Log("players alive: " + playersAlive);
-
         if (currentPlayers >= 2)
         {
-            Color ballColor = greenBall.GetComponent<SpriteRenderer>().color;
 
             timerToStart -= Time.deltaTime;
 
@@ -108,7 +96,7 @@ public class GameManager : NetworkBehaviour
                 timerText.color = Color.green;
             timerText.text = Math.Round(timerToStart, 1).ToString();
 
-            UpdatePlayersClientRpc(ballColor, timerToStart);
+            UpdatePlayersClientRpc(timerToStart);
 
             if (!gameStarted && timerToStart < 0f)
             {
@@ -138,7 +126,6 @@ public class GameManager : NetworkBehaviour
 
     private void UpdateGrid(int size)
     {
-        //
         InstantiateGrid grid = FindObjectOfType<InstantiateGrid>();
 
         grid.SetGrid(size);
@@ -156,16 +143,10 @@ public class GameManager : NetworkBehaviour
 
     private void ResetGame()
     {
-        Debug.Log("reset game");
-
 
         ResetGameClientRpc();
 
-        
-
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-        
 
         return;
 
@@ -277,7 +258,6 @@ public class GameManager : NetworkBehaviour
 
             if (gameStarted)
             {
-                greenBall.GetComponent<SpriteRenderer>().color = Color.green;
 
                 foreach (KeyValuePair<Player, List<string>> p in players)
                 {
@@ -295,28 +275,13 @@ public class GameManager : NetworkBehaviour
 
 
         }
-        else if (currentPlayers == 1)
-        {
-            greenBall.GetComponent<SpriteRenderer>().color = Color.yellow;
-        }
-        else if (currentPlayers == 0)
-        {
-            greenBall.GetComponent<SpriteRenderer>().color = Color.red;
-        }
-
-        
-
-
-
         
     }
 
     [ClientRpc]
-    private void UpdatePlayersClientRpc(Color ballColor, float timer)
+    private void UpdatePlayersClientRpc(float timer)
     {
 
-
-        greenBall.GetComponent<SpriteRenderer>().color = ballColor;
         if (timer < 1)
             timerText.color = Color.red;
         else if (timer < 2)
@@ -368,15 +333,15 @@ public class GameManager : NetworkBehaviour
             Destroy(bullet.GetComponent<NetworkObject>());
             Destroy(bullet, 0.1f);
         }
-            
-
-       
+        
     }
 
     private void CheckForPlayerDeath(Bullet bullet)
     {
         List<Player> playersToKill = new List<Player>();
         List<Bullet> bulletsToDestroy = new List<Bullet>();
+
+        bool destroyed = false;
 
         foreach (KeyValuePair<Player, List<string>> p in players)
         {
@@ -385,6 +350,8 @@ public class GameManager : NetworkBehaviour
                 if (Vector2.Distance(p.Key.transform.position, bullet.transform.position) < 3)
                 {
                     playersToKill.Add(p.Key);
+                    p.Key.GetComponent<NetworkObject>().Despawn();
+                    destroyed = true;
                 }
 
             }
@@ -397,61 +364,23 @@ public class GameManager : NetworkBehaviour
             {
                 if (Vector2.Distance(b.transform.position, bullet.transform.position) < 3)
                 {
-                    bulletsToDestroy.Add(b);
+                    //bulletsToDestroy.Add(b);
+                    b.GetComponent<NetworkObject>().Despawn();
+                    Destroy(b.GetComponent<NetworkObject>());
+                    Destroy(b);
+                    destroyed = true;
                 }
             }
         }
 
-        //int playersToKillCount = playersToKill.Count;
-
-        for (int i = 0; i < playersToKill.Count; i++)
-        {
-            playersToKill[i].GetComponent<NetworkObject>().Despawn();
-
-        }
-
-        if(playersToKill.Count > 0 || bulletsToDestroy.Count > 0)
+        if(destroyed)
         {
             bullet.GetComponent<NetworkObject>().Despawn();
             Destroy(bullet.GetComponent<NetworkObject>());
-            Destroy(bullet);//, 0.1f);
+            Destroy(bullet);
         }
 
-        foreach (Bullet b in bulletsToDestroy)
-        {
-            b.GetComponent<NetworkObject>().Despawn();
-            Destroy(b.GetComponent<NetworkObject>());
-            Destroy(b);//, 0.1f);
-        }
-
-        int[] indexOfDeadPlayers = new int[playersToKill.Count];
-        for (int i = 0;i < indexOfDeadPlayers.Length;i++)
-        {
-            indexOfDeadPlayers[i] = Array.IndexOf(players.Keys.ToArray(), playersToKill[i]);
-        }
-
-
-        for (int i = 0; i < indexOfDeadPlayers.Length; i++)
-        {
-            //Debug.Log("player in " + i + " destroyed");
-        }
-
-        //CheckForPlayerDeathClientRpc(indexOfDeadPlayers, bullets.IndexOf(bullet));
     }
-
-    [ClientRpc]
-    private void CheckForPlayerDeathClientRpc(int[] playersIndex, int bulletIndex)
-    {
-        for (int i = 0; i < playersIndex.Length; i++)
-        {
-            Debug.Log("player in " + i + " destroyed");
-            players.ElementAt(i).Key.gameObject.SetActive(false);
-        }
-
-        bullets[bulletIndex].gameObject.SetActive(false);
-    }
-
-
 
     private Vector3 GetNewVector(Vector3 pos, string dir)
     {
