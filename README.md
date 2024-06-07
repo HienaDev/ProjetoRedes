@@ -168,9 +168,17 @@ Durate o update, verificamos os inputs do jogador local, atualizamos o UI respet
 
 ![PlayerControllerUpdate](./Images/player_controller_update.png)
 
+## Conclusão
+
+
+
 ## Links
 
 [Repositório Git Hub](https://github.com/HienaDev/ProjetoRedes)
 
 Para testar a build, uma pessoa terá que executar o programa duas vezes, uma para ligar o servidor e outro para jogar, depois qualquer pessoa com o executável e com o código pode juntar-se a partida:
 [Build Projeto](https://drive.google.com/file/d/1O4kKrpXxxA3TtClZaGw47pU3MQbqnPh4/view?usp=sharing) 
+
+## Agradecimentos
+
+Agradeço ao Professor Diogo por ter disponibilizado o projeto feito em aula para usar como base para este projeto.
