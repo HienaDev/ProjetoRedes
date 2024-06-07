@@ -38,7 +38,6 @@ public class PlayerController : NetworkBehaviour
 
         networkManager = FindFirstObjectByType<NetworkManager>();
 
-        // zsd
         networkObject = GetComponent<NetworkObject>();
 
         playerIndex = gameManager.IncreasePlayerIndex();
@@ -65,8 +64,11 @@ public class PlayerController : NetworkBehaviour
             
 
         SetPlayer();
+    }
 
-        //Debug.Log("My player: " + player);
+    public void SetPlayer()
+    {
+        gameManager.SignPlayerServerRpc(playerIndex);
     }
 
     // Update is called once per frame
@@ -74,9 +76,6 @@ public class PlayerController : NetworkBehaviour
     {
         if(networkObject.IsLocalPlayer)
         {
-
-            
-
             if (Input.GetKeyDown(up))
             {
                 gameManager.PlayerMoveServerRPC(playerIndex, "up");
@@ -148,11 +147,7 @@ public class PlayerController : NetworkBehaviour
     }
     
 
-    public void SetPlayer()
-    {
-
-        gameManager.SignPlayerServerRpc(playerIndex);
-    }
+    
 
     public void DeadPlayer()
     {

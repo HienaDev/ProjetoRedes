@@ -12,6 +12,41 @@ Usa como base o código feito em aula com o Professor Diogo Andrade.
 
 ## Descrição Técnica
 
+### Diagrama de Redes
+
+O sistema de relay do unity é um sistema peer to peer, logo o host para além de ser o server também é um cliente, no casso do nosso jogo, o server não tem acesso a nenhum dos jogadores, logo acaba por atuar como um servidor e nunca como um cliente.
+
+![Diagrama de redes](./Images/diagrama_de_redes.png)
+
+### Largura de Banda
+
+Quando um cliente se conecta ao servidor, envia-se cerca de 550 bytes e recebe-se 112 + 98 bytes:
+
+![Player Connect](./Images/profiler_player_connect_1.png)
+![Player Connect](./Images/profiler_player_connect_2.png)
+
+O servidor envia 24 bytes por cada sincronização do tempo:
+
+![TimeSync](./Images/time_sync.png)
+
+Quando o jogo começa, é enviado cerca de 45 bytes para cada jogador por frame, os picos que se vêm são os 24 bytes da sincronização de tempo:
+
+![Bytes per Frame](./Images/bytes_por_frame.png)
+
+Sempre que um jogador envia um input ao servidor, o servidor recebe cerca de 31 bytes por cada cliente, e envia cerca de 13 bytes por cliente:
+
+![Bytes per input](./Images/bytes_per_input_1.png)
+![Bytes per input](./Images/bytes_per_input_2.png)
+
+Por cada turno (a cada *timerTurn* seconds), são enviados 90 + 39 bytes para cada cliente por cada bala, neste caso foram criadas duas balas, depois são enviados 18 bytes para cada movimento da bala para cada cliente, durante este turno haviam 6 balas:
+
+![Bytes per turn](./Images/bytes_per_turn_1.png)
+![Bytes per turn](./Images/bytes_per_turn_2.png)
+
+Quando um jogador morre são enviados cerca de 224 bytes para cada jogador:
+
+![Bytes per death](./Images/bytes_per_death.png)
+
 ### Jogo
 
 Ao abrir temos duas opções, iniciar um servidor ou entrar num como jogador:
@@ -62,7 +97,7 @@ No ínicio todos os jogos são iguais com esta configuração:
 
 ![Inspector](./Images/unity_inspector.png)
 
-##### NetworkSetup
+#### NetworkSetup
 
 Dentro do NetworkManager temos o Network Setup que é onde tudo é inicializado:
 
@@ -90,7 +125,7 @@ Depois intanciamos o controlador do jogador, inicializamo-lo na rede com a sua c
 ![OnClientConnect](./Images/delegate_connecting.png)
 ![OnClientConnect](./Images/player_connecting.png)
 
-##### GameManager
+#### GameManager
 
 No *script* GameManager é onde todo o jogo acontece.
 Durante o Update verificamos quantos jogadores estão vivos:
@@ -110,7 +145,7 @@ No método *UpdatePlayers* apenas atualizamos as balas e os jogadors do lado do 
 
 ![PlayerUpdate](./Images/method_update_player.png)
 
-No método MovePlayer, verificamos o último input que temos do jogador, guardado no dicionário players, e guardamos na posição *newPos*, depois verificamos se o último move foi *shoot*, caso tenha sido, instanciamos uma bala, senão, verificamos se o movimento é valido no método *CheckIfInGrid* que verifica se o jogador se tentou mover para fora da grelha, caso o movimento seja dentro da grelha, atualizamos a posição do jogador:
+No método MovePlayer, verificamos o último input que temos do jogador, guardado no dicionário players, e guardamos na posição *newPos*, depois verificamos se o último move foi *shoot*, caso tenha sido, instanciamos uma bala, senão, verificamos se o seu ultimo movimento é valido no método *CheckIfInGrid* que verifica se o jogador se tentou mover para fora da grelha, caso o movimento seja dentro da grelha, atualizamos a posição do jogador:
 
 ![PlayerUpdate](./Images/check_valid_player.png)
 
@@ -122,4 +157,20 @@ Caso o movimento da bala seja válido, verificamos se houve colisão com um joga
 
 ![CheckDeath](./Images/check_for_death.png)
 
-##### PlayerController
+#### PlayerController
+
+O script *PlayerController* é o unico script que o cliente controla, neste script associamos o controlador a um jogador, e caso sejamos o jogador local, atualizamos o UI com o icon do jogador e com a ação nula.
+Depois registamos o play no gameManager, para podermos depois enviar para o gameManager as ações que o cliente faz.
+
+![PlayerControllerStart](./Images/player_controller_start.png)
+
+Durate o update, verificamos os inputs do jogador local, atualizamos o UI respetivamente e registamos esse movimento no gameManager:
+
+![PlayerControllerUpdate](./Images/player_controller_update.png)
+
+## Links
+
+[Repositório Git Hub](https://github.com/HienaDev/ProjetoRedes)
+
+Para testar a build, uma pessoa terá que executar o programa duas vezes, uma para ligar o servidor e outro para jogar, depois qualquer pessoa com o executável e com o código pode juntar-se a partida:
+[Build Projeto](https://drive.google.com/file/d/1O4kKrpXxxA3TtClZaGw47pU3MQbqnPh4/view?usp=sharing) 
