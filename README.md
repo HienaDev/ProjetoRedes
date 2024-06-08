@@ -14,7 +14,8 @@ Usa como base o código feito em aula com o Professor Diogo Andrade.
 
 ### Diagrama de Redes
 
-O sistema de relay do unity é um sistema peer to peer, logo o host para além de ser o server também é um cliente, no casso do nosso jogo, o server não tem acesso a nenhum dos jogadores, logo acaba por atuar como um servidor e nunca como um cliente.
+O sistema de Relay do Unity aumenta a segurança do modelo peer-to-peer, adicionando um servidor que serve como intermediário para a conexão entre o Host e os Clients. Ao criar uma ponte para a comunicação, remove a necessidade de partilhar o endereço IP com os outros jogadores, visto que eles apenas precisam de se conectar ao Relay com o código, que então os passa para o host real.
+Uma desvantagem é ser um servidor que existe que teria de ser pago caso se passe um certo limite.
 
 ![Diagrama de redes](./Images/diagrama_de_redes.png)
 
